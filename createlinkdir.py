@@ -2,11 +2,11 @@
 
 import os, hashlib
 
-def calc_md5(path):
+def calc_sig(path):
     try:
         fp = open(path, 'rb')
         try:
-            sig = hashlib.md5()
+            sig = hashlib.sha256()
             while True:
                 chunk = fp.read(1024 * 16)
                 if not chunk: break
@@ -25,10 +25,10 @@ for root, dirs, files in os.walk('.'):
         if name.endswith(".jpg") or name.endswith(".JPG"):
             p = os.path.abspath(os.path.join(root, name))
             if not os.path.islink(p): 
-                md5 = calc_md5(p)
-                d = md5[:2]
+                sig = calc_sig(p)
+                d = sig[:3]
                 tgt_dir = os.path.join(linkDir, d)
-                tgt = os.path.join(tgt_dir, md5[2:] + ".jpg")
+                tgt = os.path.join(tgt_dir, sig[3:] + ".jpg")
                 if not os.path.isdir(tgt_dir):
                     os.mkdir(tgt_dir)
                 if not os.path.islink(tgt):
