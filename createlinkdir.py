@@ -26,7 +26,11 @@ for root, dirs, files in os.walk('.'):
             p = os.path.abspath(os.path.join(root, name))
             if not os.path.islink(p): 
                 md5 = calc_md5(p)
-                tgt = os.path.join(linkDir, md5 + ".jpg")
+                d = md5[:2]
+                tgt_dir = os.path.join(linkDir, d)
+                tgt = os.path.join(tgt_dir, md5[2:] + ".jpg")
+                if not os.path.isdir(tgt_dir):
+                    os.mkdir(tgt_dir)
                 if not os.path.islink(tgt):
                     os.symlink(p, tgt)
                 
